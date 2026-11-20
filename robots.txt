@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://asianbolt-company.web.app/sitemap.xml
