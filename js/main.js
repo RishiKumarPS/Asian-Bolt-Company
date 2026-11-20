@@ -543,7 +543,7 @@ if (productGrid && productSearch) {
     });
   });
 
-  quoteSpecsInput?.addEventListener("change", () => {
+  quoteSpecsInput?.addEventListener("input", () => {
     saveQuoteState(quoteItems, quoteOrderType, quoteSpecsInput.value);
     updateQuoteSendLinks();
   });

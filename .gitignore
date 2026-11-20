@@ -26,6 +26,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Playwright & Testing artifacts
+playwright-report/
+test-results/
+.firebase/
+
 # Node / Package manager dependencies (if added later)
 node_modules/
 package-lock.json

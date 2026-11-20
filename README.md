@@ -140,17 +140,3 @@ firebase deploy --only hosting
 - **Ignored Files**: `README.md`, `firebase.json`, hidden files, and development files are excluded from hosting uploads.
 
 ---
-
-## Store Information
-
-| Detail | Information |
-| :--- | :--- |
-| **Store Name** | Asian Bolt Company |
-| **Established** | 1988 |
-| **Address** | No. 11, Jewellers Street, 4th Cross, Off Commercial Street, Shivaji Nagar, Bengaluru, Karnataka 560001 |
-| **Landmark** | 4th Cross, Off Commercial Street |
-| **Working Hours** | Monday – Saturday: 10:30 AM – 6:30 PM IST (Closed Sundays) |
-| **Landline Phone** | [+91 80 4124 9376](tel:+918041249376) |
-| **Mobile / WhatsApp** | [+91 98452 19458](https://wa.me/919845219458) |
-| **Email** | [asianboltcompany@yahoo.co.in](mailto:asianboltcompany@yahoo.co.in) |
-| **Payment Modes** | Cash, UPI, Credit Card, Debit Card |

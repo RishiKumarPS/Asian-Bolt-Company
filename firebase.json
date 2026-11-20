@@ -6,7 +6,12 @@
       "**/.*",
       "**/node_modules/**",
       "README.md",
-      "scripts/**"
+      "tests/**",
+      "playwright.config.*",
+      "package.json",
+      "package-lock.json",
+      "playwright-report/**",
+      "test-results/**"
     ],
     "headers": [
       {
