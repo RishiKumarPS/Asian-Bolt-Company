@@ -71,19 +71,25 @@ Asian Bolt Company/
 Because JavaScript is organized into native ES6 modules (`import` / `export`), opening `index.html` directly via the `file://` protocol will trigger browser CORS restrictions. Always run a lightweight local HTTP server:
 
 ### Option 1: VS Code Live Server
+
 Right-click `index.html` in VS Code and select **"Open with Live Server"**.
 
 ### Option 2: Node.js `npx serve`
+
 Run from the project root:
+
 ```bash
 npx serve .
 ```
+
 Then visit `http://localhost:3000` (or the URL displayed in the terminal).
 
 ### Option 3: Python 3
+
 ```bash
 python -m http.server 8000
 ```
+
 Then visit `http://localhost:8000`.
 
 ---
@@ -91,12 +97,14 @@ Then visit `http://localhost:8000`.
 ## Common Updates (Quick Maintenance Guide)
 
 ### 1. Business Phone, Hours, Address, or WhatsApp
+
 - Update constants in `js/config.js` (`SITE_CONFIG`).
 - Update matching entries in `index.html`:
   - Contact links in the `<header>`, `#visit`, and `.mobile-action-bar` sections.
   - Schema.org JSON-LD `<script type="application/ld+json">` block in `<head>`.
 
 ### 2. Adding or Editing Catalog Products
+
 - Open `js/products.js` and add/edit objects in the `products` array:
   ```javascript
   {
@@ -109,6 +117,7 @@ Then visit `http://localhost:8000`.
   ```
 
 ### 3. Cache Invalidation
+
 - When making substantial updates to `css/styles.css` or `js/main.js`, bump the query string version in `index.html` (e.g., `?v=3` → `?v=4`):
   ```html
   <link rel="stylesheet" href="./css/styles.css?v=4" />
@@ -120,7 +129,9 @@ Then visit `http://localhost:8000`.
 ## Deployment (Firebase Hosting & GitHub Actions)
 
 ### Automatic Deployment
+
 Pushing commits to the `main` branch automatically deploys to live Firebase Hosting via `.github/workflows/firebase-hosting-merge.yml`:
+
 ```bash
 git add .
 git commit -m "Your update message"
@@ -128,12 +139,15 @@ git push origin main
 ```
 
 ### Manual Deployment
+
 If Firebase CLI is installed locally:
+
 ```bash
 firebase deploy --only hosting
 ```
 
 ### Hosting & Caching Configuration (`firebase.json`)
+
 - **HTML / CSS / JS**: Served with `Cache-Control: public, max-age=0, must-revalidate` so code updates propagate to users immediately without stale-cache issues.
 - **Assets (`assets/**`)**: Served with `Cache-Control: public, max-age=2592000` (30 days) for optimized static caching.
 - **Security Headers**: All routes send `X-Content-Type-Options: nosniff` and `Referrer-Policy: strict-origin-when-cross-origin`.
