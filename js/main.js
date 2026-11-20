@@ -1,5 +1,14 @@
 import { products } from "./products.js";
+import {
+  SITE_CONFIG,
+  safeStorage,
+  buildWhatsAppUrl,
+  buildMailtoUrl,
+  debounce,
+  ICONS,
+} from "./config.js";
 
+// DOM References
 const year = document.querySelector("#current-year");
 const menuToggle = document.querySelector("#menu-toggle");
 const siteNav = document.querySelector("#site-nav");
@@ -22,104 +31,26 @@ const orderTypeInputs = document.querySelectorAll('input[name="quote-order-type"
 const quoteSpecsInput = document.querySelector("#quote-specs");
 const sendQuoteWhatsApp = document.querySelector("#send-quote-whatsapp");
 const sendQuoteEmail = document.querySelector("#send-quote-email");
-const QUOTE_STORAGE_KEY = "asian-bolt-company-quote-v1";
-const WHATSAPP_PHONE = "919845219458";
+
+// Lookup map for fast product resolution
 const productById = new Map(products.map((product) => [product.id, product]));
 
+// State
 let quoteItems = new Map();
 let quoteOrderType = "retail";
 let quoteSpecs = "";
 let activeCategory = "all";
 let drawerReturnFocus = null;
-let copyToastTimer;
+let copyToastTimer = null;
 
-/* ── Safe Local Storage Abstraction (handles blocked/private cookies) ── */
-const safeStorage = {
-  isAvailable: (() => {
-    try {
-      if (typeof window === "undefined" || !("localStorage" in window)) {
-        return false;
-      }
-      const testKey = "__abc_storage_test__";
-      window.localStorage.setItem(testKey, "1");
-      window.localStorage.removeItem(testKey);
-      return true;
-    } catch {
-      return false;
-    }
-  })(),
-  getItem(key) {
-    if (!this.isAvailable) return null;
-    try {
-      return window.localStorage.getItem(key);
-    } catch (e) {
-      console.warn("Storage access restricted:", e);
-      return null;
-    }
-  },
-  setItem(key, value) {
-    if (!this.isAvailable) return false;
-    try {
-      window.localStorage.setItem(key, value);
-      return true;
-    } catch (e) {
-      console.warn("Storage write failed:", e);
-      return false;
-    }
-  },
-};
-
-/* ── Custom inline SVG icon markup (uniform 1.7px stroke, 48×48 viewBox) ── */
-const productIconMarkup = {
-  bolt:
-    '<path d="M20 6h8v4h-8z"/>' +
-    '<path d="M21 10h6v32h-6z"/>' +
-    '<path d="M18 15h12M18 21h12M18 27h12M18 33h12"/>' +
-    '<path d="M21 42h6"/>',
-  nut:
-    '<path d="M24 4 40 13.25v18.5L24 41 8 31.75V13.25Z"/>' +
-    '<circle cx="24" cy="22.5" r="7.5"/>',
-  washer:
-    '<ellipse cx="24" cy="24" rx="17" ry="17"/>' +
-    '<ellipse cx="24" cy="24" rx="8" ry="8"/>' +
-    '<path d="M14.5 10.5 33.5 37.5" opacity=".18"/>',
-  rod:
-    '<rect x="18" y="5" width="12" height="38" rx="1"/>' +
-    '<path d="M18 13l12-5M18 20l12-5M18 27l12-5M18 34l12-5M18 41l12-5"/>',
-  screw:
-    '<path d="M20 7h8l-4 6-4-6Z"/>' +
-    '<line x1="24" y1="13" x2="24" y2="42"/>' +
-    '<path d="M20 19h8M20 25h8M20 31h8M20 37h8"/>' +
-    '<circle cx="24" cy="7" r="1.5" fill="currentColor" stroke="none"/>',
-  anchor:
-    '<path d="M24 10v28"/>' +
-    '<path d="M18 10h12"/>' +
-    '<path d="M14 38l10-8 10 8"/>' +
-    '<circle cx="24" cy="7" r="3"/>',
-  "drill-bit":
-    '<path d="M24 5v10l-5 5 5 5-5 5 5 5v8"/>' +
-    '<path d="M24 5l6 10M24 5l-6 10"/>' +
-    '<path d="M19 38h10"/>',
-  "allen-key":
-    '<path d="M14 8v20h20"/>' +
-    '<path d="M14 8h5M34 28v5"/>' +
-    '<path d="M14 14l6-6"/>',
-  wrench:
-    '<path d="M8 36l18-18"/>' +
-    '<path d="M30 14a8 8 0 1 1 4 4"/>' +
-    '<path d="M26 18l-4-4"/>' +
-    '<path d="M6 38l4-4 4 4-4 4z"/>',
-};
-
+// Dynamic copyright year
 if (year) {
   year.textContent = String(new Date().getFullYear());
 }
 
+/* ── Mobile Navigation Toggle ── */
 const setMobileNavOpen = (isOpen) => {
-  if (!menuToggle || !siteNav) {
-    return;
-  }
-
+  if (!menuToggle || !siteNav) return;
   menuToggle.setAttribute("aria-expanded", String(isOpen));
   menuToggle.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
   siteNav.classList.toggle("is-open", isOpen);
@@ -138,21 +69,27 @@ if (menuToggle && siteNav) {
   });
 }
 
+/* ── Live Store Status (Bengaluru IST) ── */
 if (openStatus && openStatusText) {
+  const dayMap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+
   const updateStoreStatus = () => {
     const parts = new Intl.DateTimeFormat("en-US", {
-      timeZone: "Asia/Kolkata",
+      timeZone: SITE_CONFIG.storeHours.timezone,
       weekday: "short",
       hour: "2-digit",
       minute: "2-digit",
       hourCycle: "h23",
     }).formatToParts(new Date());
+
     const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
     const currentMinutes = Number(values.hour) * 60 + Number(values.minute);
+    const currentDay = dayMap[values.weekday];
+
     const isOpen =
-      values.weekday !== "Sun" &&
-      currentMinutes >= 10 * 60 + 30 &&
-      currentMinutes < 18 * 60 + 30;
+      SITE_CONFIG.storeHours.openDays.includes(currentDay) &&
+      currentMinutes >= SITE_CONFIG.storeHours.openMinutes &&
+      currentMinutes < SITE_CONFIG.storeHours.closeMinutes;
 
     openStatusText.textContent = isOpen
       ? "Open Now • Closes at 6:30 PM"
@@ -165,11 +102,9 @@ if (openStatus && openStatusText) {
   window.setInterval(updateStoreStatus, 60_000);
 }
 
+/* ── Toast Helper ── */
 const showCopyToast = (message, isError = false) => {
-  if (!copyToast) {
-    return;
-  }
-
+  if (!copyToast) return;
   window.clearTimeout(copyToastTimer);
   copyToast.textContent = message;
   copyToast.classList.toggle("is-error", isError);
@@ -181,20 +116,21 @@ const showCopyToast = (message, isError = false) => {
   }, 2200);
 };
 
+/* ── Copy Store Address ── */
 if (copyAddressButton && storeAddress) {
   copyAddressButton.addEventListener("click", async () => {
     const address = storeAddress.innerText.replace(/\s+/g, " ").trim();
-
     try {
       await navigator.clipboard.writeText(address);
       showCopyToast("Copied to clipboard!");
     } catch (error) {
       showCopyToast("Could not copy address. Please select and copy manually.", true);
-      console.error("Unable to copy the store address.", error);
+      console.error("Unable to copy store address:", error);
     }
   });
 }
 
+/* ── Quote Persistence & State ── */
 const showQuoteStorageNotice = (message) => {
   if (quoteStorageNotice) {
     quoteStorageNotice.textContent = message;
@@ -208,14 +144,12 @@ const loadQuoteState = () => {
   }
 
   try {
-    const savedState = safeStorage.getItem(QUOTE_STORAGE_KEY);
-    if (!savedState) {
-      return;
-    }
+    const savedState = safeStorage.get(SITE_CONFIG.quoteStorageKey);
+    if (!savedState) return;
 
     const parsedState = JSON.parse(savedState);
     if (!parsedState || !Array.isArray(parsedState.items)) {
-      throw new TypeError("Saved quote data is not in the expected format.");
+      throw new TypeError("Saved quote data is not in expected format.");
     }
 
     quoteItems = new Map(
@@ -226,6 +160,7 @@ const loadQuoteState = () => {
           { quantityNote: typeof item.quantityNote === "string" ? item.quantityNote : "" },
         ]),
     );
+
     if (parsedState.orderType === "wholesale" || parsedState.orderType === "retail") {
       quoteOrderType = parsedState.orderType;
     }
@@ -234,13 +169,13 @@ const loadQuoteState = () => {
     }
   } catch (error) {
     showQuoteStorageNotice("Your previous quote list could not be restored.");
-    console.error("Unable to parse quote list from storage.", error);
+    console.error("Unable to parse quote list from storage:", error);
   }
 };
 
 const saveQuoteState = (nextItems, nextOrderType, nextSpecs) => {
-  const success = safeStorage.setItem(
-    QUOTE_STORAGE_KEY,
+  const success = safeStorage.set(
+    SITE_CONFIG.quoteStorageKey,
     JSON.stringify({
       items: [...nextItems].map(([productId, item]) => ({
         productId,
@@ -262,11 +197,7 @@ const saveQuoteState = (nextItems, nextOrderType, nextSpecs) => {
   quoteSpecs = nextSpecs;
 };
 
-/* ── Edge-case safe URL encoding for WhatsApp messages ── */
-const safeEncodeForUrl = (str) => {
-  return encodeURIComponent(str).replace(/[!'()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
-};
-
+/* ── Build Formatted Quote Message ── */
 const buildQuoteMessage = () => {
   const itemLines = [];
   quoteItems.forEach((item, productId) => {
@@ -293,24 +224,24 @@ const buildQuoteMessage = () => {
 const updateQuoteSendLinks = () => {
   const hasItems = quoteItems.size > 0;
   const message = buildQuoteMessage();
-  const encodedMessage = safeEncodeForUrl(message);
 
   if (sendQuoteWhatsApp) {
     sendQuoteWhatsApp.hidden = !hasItems;
     sendQuoteWhatsApp.href = hasItems
-      ? `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`
-      : `https://wa.me/${WHATSAPP_PHONE}`;
+      ? buildWhatsAppUrl(message)
+      : buildWhatsAppUrl();
   }
   if (sendQuoteEmail) {
     sendQuoteEmail.hidden = !hasItems;
     sendQuoteEmail.href = hasItems
-      ? `mailto:asianboltcompany@yahoo.co.in?subject=${safeEncodeForUrl("Quote Request - Asian Bolt Company")}&body=${encodedMessage}`
-      : "mailto:asianboltcompany@yahoo.co.in";
+      ? buildMailtoUrl("Quote Request - Asian Bolt Company", message)
+      : `mailto:${SITE_CONFIG.email}`;
   }
 };
 
 loadQuoteState();
 
+/* ── Product Catalogue & Drawer Interaction ── */
 if (productGrid && productSearch) {
   const createProductCard = (product) => {
     const card = document.createElement("article");
@@ -324,7 +255,7 @@ if (productGrid && productSearch) {
     icon.setAttribute("viewBox", "0 0 48 48");
     icon.setAttribute("fill", "none");
     icon.setAttribute("aria-hidden", "true");
-    icon.innerHTML = productIconMarkup[product.icon] || productIconMarkup.bolt;
+    icon.innerHTML = ICONS[product.icon] || ICONS.bolt;
 
     const category = document.createElement("span");
     category.className = "product-card__category";
@@ -370,7 +301,7 @@ if (productGrid && productSearch) {
       emptyState.append("Looking for a specialized fastener? ");
 
       const whatsappLink = document.createElement("a");
-      whatsappLink.href = `https://wa.me/${WHATSAPP_PHONE}?text=${safeEncodeForUrl(`Hello Asian Bolt Company, I am looking for: ${productSearch.value.trim()}`)}`;
+      whatsappLink.href = buildWhatsAppUrl(`Hello Asian Bolt Company, I am looking for: ${productSearch.value.trim()}`);
       whatsappLink.target = "_blank";
       whatsappLink.rel = "noopener noreferrer";
       whatsappLink.textContent = "Ask us directly on WhatsApp";
@@ -383,10 +314,7 @@ if (productGrid && productSearch) {
   };
 
   const updateQuoteBasket = () => {
-    if (!quoteBasket || !basketCount) {
-      return;
-    }
-
+    if (!quoteBasket || !basketCount) return;
     const count = quoteItems.size;
     basketCount.textContent = String(count);
     quoteBasket.hidden = count === 0;
@@ -398,11 +326,9 @@ if (productGrid && productSearch) {
   };
 
   const renderQuoteDrawer = () => {
-    if (!quoteListItems) {
-      return;
-    }
-
+    if (!quoteListItems) return;
     quoteListItems.replaceChildren();
+
     if (quoteItems.size === 0) {
       const emptyState = document.createElement("p");
       emptyState.className = "quote-drawer__empty";
@@ -411,9 +337,7 @@ if (productGrid && productSearch) {
     } else {
       quoteItems.forEach((item, productId) => {
         const product = productById.get(productId);
-        if (!product) {
-          return;
-        }
+        if (!product) return;
 
         const row = document.createElement("article");
         row.className = "quote-line-item";
@@ -465,12 +389,9 @@ if (productGrid && productSearch) {
     updateQuoteSendLinks();
   };
 
-  /* ── Open / Close with bulletproof scroll lock & focus trap ── */
+  /* ── Open / Close with Scroll Lock & Focus Trap ── */
   const openQuoteDrawer = () => {
-    if (!quoteDrawer || !quoteBackdrop) {
-      return;
-    }
-
+    if (!quoteDrawer || !quoteBackdrop) return;
     drawerReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     renderQuoteDrawer();
     quoteDrawer.classList.add("is-open");
@@ -478,7 +399,6 @@ if (productGrid && productSearch) {
     quoteBackdrop.classList.add("is-open");
     quoteBackdrop.setAttribute("aria-hidden", "false");
 
-    // Lock body and html scroll
     document.documentElement.classList.add("quote-drawer-open");
     document.body.classList.add("quote-drawer-open");
 
@@ -495,11 +415,9 @@ if (productGrid && productSearch) {
     quoteBackdrop.classList.remove("is-open");
     quoteBackdrop.setAttribute("aria-hidden", "true");
 
-    // Unlock body and html scroll
     document.documentElement.classList.remove("quote-drawer-open");
     document.body.classList.remove("quote-drawer-open");
 
-    // Restore focus safely
     if (
       drawerReturnFocus instanceof HTMLElement &&
       document.contains(drawerReturnFocus) &&
@@ -515,6 +433,7 @@ if (productGrid && productSearch) {
     drawerReturnFocus = null;
   };
 
+  /* ── Filter Pills ── */
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       activeCategory = button.dataset.categoryFilter ?? "all";
@@ -527,22 +446,17 @@ if (productGrid && productSearch) {
     });
   });
 
-  productSearch.addEventListener("input", renderProducts);
+  /* ── Debounced Search ── */
+  productSearch.addEventListener("input", debounce(renderProducts, 150));
 
+  /* ── Delegated Click Handler on Product Grid ── */
   productGrid.addEventListener("click", (event) => {
-    if (!(event.target instanceof Element)) {
-      return;
-    }
-
+    if (!(event.target instanceof Element)) return;
     const button = event.target.closest("[data-quote-toggle]");
-    if (!(button instanceof HTMLButtonElement)) {
-      return;
-    }
+    if (!(button instanceof HTMLButtonElement)) return;
 
     const productId = button.dataset.quoteToggle;
-    if (!productId) {
-      return;
-    }
+    if (!productId) return;
 
     const nextItems = new Map(quoteItems);
     if (nextItems.has(productId)) {
@@ -567,7 +481,6 @@ if (productGrid && productSearch) {
   quoteDrawerClose?.addEventListener("click", closeQuoteDrawer);
   quoteBackdrop?.addEventListener("click", closeQuoteDrawer);
 
-  // Prevent background touch scrolling on the backdrop
   quoteBackdrop?.addEventListener(
     "touchmove",
     (event) => {
@@ -576,20 +489,14 @@ if (productGrid && productSearch) {
     { passive: false },
   );
 
+  /* ── Delegated Click Handler on Quote Drawer (Remove buttons) ── */
   quoteListItems?.addEventListener("click", (event) => {
-    if (!(event.target instanceof Element)) {
-      return;
-    }
-
+    if (!(event.target instanceof Element)) return;
     const removeButton = event.target.closest("[data-remove-quote]");
-    if (!(removeButton instanceof HTMLButtonElement)) {
-      return;
-    }
+    if (!(removeButton instanceof HTMLButtonElement)) return;
 
     const productId = removeButton.dataset.removeQuote;
-    if (!productId || !quoteItems.has(productId)) {
-      return;
-    }
+    if (!productId || !quoteItems.has(productId)) return;
 
     const removedIndex = [...quoteItems.keys()].indexOf(productId);
     const nextItems = new Map(quoteItems);
@@ -613,6 +520,7 @@ if (productGrid && productSearch) {
       });
   });
 
+  /* ── Delegated Change Handler on Quote Drawer (Notes) ── */
   quoteListItems?.addEventListener("change", (event) => {
     if (!(event.target instanceof HTMLTextAreaElement) || !event.target.dataset.quoteNote) {
       return;
@@ -625,6 +533,7 @@ if (productGrid && productSearch) {
     updateQuoteSendLinks();
   });
 
+  /* ── Order Type & Custom Specs ── */
   orderTypeInputs.forEach((input) => {
     input.addEventListener("change", () => {
       if (input.checked) {
@@ -639,6 +548,7 @@ if (productGrid && productSearch) {
     updateQuoteSendLinks();
   });
 
+  /* ── Escape Key & Focus Trap ── */
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       if (quoteDrawer?.classList.contains("is-open")) {
@@ -653,7 +563,6 @@ if (productGrid && productSearch) {
       return;
     }
 
-    // Accessible focus trapping inside the open quote drawer
     const focusableElements = Array.from(
       quoteDrawer.querySelectorAll(
         'a[href]:not([hidden]), button:not([disabled]):not([hidden]), input:not([disabled]):not([hidden]), textarea:not([disabled]):not([hidden])',
@@ -683,9 +592,8 @@ if (productGrid && productSearch) {
   renderQuoteDrawer();
 }
 
-/* ── Scroll-reveal with IntersectionObserver ────────────────────── */
+/* ── Scroll-reveal with IntersectionObserver (Immediate Unobserve) ── */
 (() => {
-  /* Respect prefers-reduced-motion: skip all reveal animations */
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (prefersReduced) {
     document.querySelectorAll(".reveal").forEach((el) => el.classList.add("is-visible"));
