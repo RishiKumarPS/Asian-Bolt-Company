@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>OG Preview PNG Renderer - Asian Bolt Company</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #18110D;
+      color: #F8F7F4;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    p {
+      margin: 0;
+      color: #D1D1D1;
+      font-size: 14px;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
+    button {
+      background: #F5D042;
+      color: #2B1E16;
+      border: none;
+      padding: 10px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    button:hover {
+      background: #FFFFFF;
+    }
+    #preview-container {
+      width: 1200px;
+      height: 630px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(245, 208, 66, 0.3);
+      background: #2B1E16;
+    }
+    canvas {
+      display: block;
+      width: 1200px;
+      height: 630px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Asian Bolt Company • Open Graph (1200x630) Preview Generator</h1>
+  <p>Canvas renders below. Click <strong>"Save as assets/og-preview.png"</strong> to download.</p>
+  <div class="actions">
+    <button id="download-btn">Save as assets/og-preview.png</button>
+  </div>
+
+  <div id="preview-container">
+    <canvas id="ogCanvas" width="1200" height="630"></canvas>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('ogCanvas');
+    const ctx = canvas.getContext('2d');
+
+    async function draw() {
+      await document.fonts.ready;
+
+      // 1. Background
+      ctx.fillStyle = '#2B1E16';
+      ctx.fillRect(0, 0, 1200, 630);
+
+      // 2. Technical Hex Grid Background
+      ctx.strokeStyle = 'rgba(245, 208, 66, 0.04)';
+      ctx.lineWidth = 1;
+      const R = 32;
+      const h = R * Math.sqrt(3);
+      for (let y = -h; y < 630 + h * 2; y += h) {
+        for (let x = -R * 3; x < 1200 + R * 3; x += R * 3) {
+          drawHex(x, y, R);
+          drawHex(x + R * 1.5, y + h / 2, R);
+        }
+      }
+
+      // 3. Technical Borders & Corner Accents
+      ctx.strokeStyle = 'rgba(92, 78, 60, 0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(36, 36, 1128, 558);
+
+      ctx.strokeStyle = 'rgba(245, 208, 66, 0.2)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(44, 44, 1112, 542);
+
+      // Corner Crosshairs
+      ctx.strokeStyle = '#F5D042';
+      ctx.lineWidth = 1.5;
+      const corners = [[36, 36], [1164, 36], [36, 594], [1164, 594]];
+      corners.forEach(([cx, cy]) => {
+        ctx.beginPath();
+        ctx.moveTo(cx - 10, cy); ctx.lineTo(cx + 10, cy);
+        ctx.moveTo(cx, cy - 10); ctx.lineTo(cx, cy + 10);
+        ctx.stroke();
+      });
+
+      // 4. Category Tag
+      ctx.fillStyle = 'rgba(92, 78, 60, 0.4)';
+      ctx.fillRect(450, 78, 300, 32);
+      ctx.strokeStyle = 'rgba(245, 208, 66, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(450, 78, 300, 32);
+
+      ctx.fillStyle = '#F5D042';
+      ctx.font = '600 13px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('DEALERS IN FASTENERS', 600, 94);
+
+      // 5. Hex Bolt Emblem
+      drawBoltEmblem(600, 204);
+
+      // 6. Title: ASIAN BOLT COMPANY
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '800 72px "Barlow Condensed", "Arial Black", Impact, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillText('ASIAN BOLT COMPANY', 600, 336);
+
+      // 7. Subtitle: DEALERS IN A–Z FASTENERS!
+      ctx.fillStyle = '#F5D042';
+      ctx.font = '700 28px "Barlow Condensed", sans-serif';
+      ctx.fillText('DEALERS IN A–Z FASTENERS!', 600, 396);
+
+      // 8. Divider Bar
+      ctx.strokeStyle = 'rgba(245, 208, 66, 0.5)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(420, 440);
+      ctx.lineTo(780, 440);
+      ctx.stroke();
+
+      // Center diamond
+      ctx.fillStyle = '#F5D042';
+      ctx.save();
+      ctx.translate(600, 440);
+      ctx.rotate(Math.PI / 4);
+      ctx.fillRect(-5, -5, 10, 10);
+      ctx.restore();
+
+      // 9. Footer
+      ctx.fillStyle = '#D1D1D1';
+      ctx.font = '600 15px Inter, sans-serif';
+      ctx.fillText('EST. 1988 • SHIVAJI NAGAR, BENGALURU • RETAIL & WHOLESALE', 600, 516);
+    }
+
+    function drawHex(x, y, r) {
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI / 3) * i;
+        const hx = x + r * Math.cos(angle);
+        const hy = y + r * Math.sin(angle);
+        if (i === 0) ctx.moveTo(hx, hy);
+        else ctx.lineTo(hx, hy);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    function drawBoltEmblem(cx, cy) {
+      // Outer hexagon
+      ctx.fillStyle = '#F5D042';
+      ctx.beginPath();
+      const r = 52;
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI / 3) * i - Math.PI / 6;
+        const x = cx + r * Math.cos(angle);
+        const y = cy + r * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      // Inner circular socket
+      ctx.fillStyle = '#2B1E16';
+      ctx.beginPath();
+      ctx.arc(cx, cy, 23, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Center hex socket
+      ctx.fillStyle = '#F5D042';
+      ctx.beginPath();
+      const innerR = 11;
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI / 3) * i - Math.PI / 6;
+        const x = cx + innerR * Math.cos(angle);
+        const y = cy + innerR * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    draw();
+
+    document.getElementById('download-btn').addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'og-preview.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  </script>
+</body>
+</html>
