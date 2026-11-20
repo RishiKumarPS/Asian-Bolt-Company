@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#2B1E16"/>
+  <!-- Sharp minimal #F5D042 hexagonal bolt icon -->
+  <polygon points="32,13 49,22.8 49,42.4 32,52.2 15,42.4 15,22.8" fill="#F5D042"/>
+  <circle cx="32" cy="32.5" r="8" fill="#2B1E16"/>
+  <circle cx="32" cy="32.5" r="3.5" fill="#F5D042"/>
+</svg>

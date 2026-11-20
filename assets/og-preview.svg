@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <!-- Subtle technical hex grid pattern -->
+    <pattern id="hex-grid" width="60" height="103.923" patternUnits="userSpaceOnUse">
+      <path d="M30 0 L60 17.32 L60 51.96 L30 69.28 L0 51.96 L0 17.32 Z" fill="none" stroke="#F5D042" stroke-width="0.8" stroke-opacity="0.04"/>
+      <path d="M30 69.28 L60 86.6 L60 121.24 L30 138.56 L0 121.24 L0 86.6 Z" fill="none" stroke="#F5D042" stroke-width="0.8" stroke-opacity="0.04"/>
+      <path d="M0 51.96 L30 69.28" fill="none" stroke="#F5D042" stroke-width="0.8" stroke-opacity="0.04"/>
+      <path d="M60 51.96 L30 69.28" fill="none" stroke="#F5D042" stroke-width="0.8" stroke-opacity="0.04"/>
+    </pattern>
+    <style>
+      .brand-title {
+        font-family: 'Barlow Condensed', 'Arial Black', Impact, sans-serif;
+        font-weight: 800;
+        font-size: 72px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        fill: #FFFFFF;
+        text-anchor: middle;
+      }
+      .brand-subtitle {
+        font-family: 'Barlow Condensed', 'Arial Black', sans-serif;
+        font-weight: 700;
+        font-size: 28px;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        fill: #F5D042;
+        text-anchor: middle;
+      }
+      .brand-footer {
+        font-family: 'Inter', Arial, sans-serif;
+        font-weight: 600;
+        font-size: 15px;
+        letter-spacing: 3.5px;
+        text-transform: uppercase;
+        fill: #D1D1D1;
+        text-anchor: middle;
+      }
+      .brand-tag {
+        font-family: 'Inter', Arial, sans-serif;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        fill: #F5D042;
+        text-anchor: middle;
+      }
+    </style>
+  </defs>
+
+  <!-- Background in #2B1E16 espresso -->
+  <rect width="1200" height="630" fill="#2B1E16"/>
+
+  <!-- Hex grid motif -->
+  <rect width="1200" height="630" fill="url(#hex-grid)"/>
+
+  <!-- Technical border frame with corner accents -->
+  <rect x="36" y="36" width="1128" height="558" fill="none" stroke="#5C4E3C" stroke-width="1.5" stroke-opacity="0.4"/>
+  <rect x="44" y="44" width="1112" height="542" fill="none" stroke="#F5D042" stroke-width="1" stroke-opacity="0.15"/>
+
+  <!-- Corner crosshairs -->
+  <path d="M30 36 h12 M36 30 v12 M1170 36 h-12 M1164 30 v12 M30 594 h12 M36 600 v-12 M1170 594 h-12 M1164 600 v-12" stroke="#F5D042" stroke-width="1.5" stroke-opacity="0.4"/>
+
+  <!-- Top category badge -->
+  <rect x="460" y="80" width="280" height="30" rx="4" fill="#5C4E3C" fill-opacity="0.3" stroke="#F5D042" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="600" y="100" class="brand-tag">DEALERS IN FASTENERS</text>
+
+  <!-- Hex Bolt Emblem -->
+  <g transform="translate(600, 204)">
+    <!-- Outer hexagon -->
+    <polygon points="0,-52 45,-26 45,26 0,52 -45,26 -45,-26" fill="#F5D042"/>
+    <!-- Inner circular hole -->
+    <circle cx="0" cy="0" r="23" fill="#2B1E16"/>
+    <!-- Center hex socket -->
+    <polygon points="0,-11 9.5,-5.5 9.5,5.5 0,11 -9.5,5.5 -9.5,-5.5" fill="#F5D042"/>
+  </g>
+
+  <!-- Brand Typography -->
+  <text x="600" y="340" class="brand-title">ASIAN BOLT COMPANY</text>
+  <text x="600" y="405" class="brand-subtitle">DEALERS IN A–Z FASTENERS!</text>
+
+  <!-- Industrial divider bar -->
+  <line x1="420" y1="450" x2="780" y2="450" stroke="#F5D042" stroke-width="2" stroke-opacity="0.4"/>
+  <polygon points="600,446 604,450 600,454 596,450" fill="#F5D042"/>
+
+  <!-- Footer strip -->
+  <text x="600" y="525" class="brand-footer">EST. 1988 • SHIVAJI NAGAR, BENGALURU • RETAIL &amp; WHOLESALE</text>
+</svg>

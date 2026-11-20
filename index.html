@@ -13,6 +13,7 @@
       content="Asian Bolt Company — retail &amp; wholesale fasteners dealer in Shivaji Nagar, Bengaluru since 1988. Screws, bolts, nuts, washers, anchors &amp; tools. Same-day delivery available."
     />
     <link rel="canonical" href="https://asianbolt-company.web.app/" />
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
     <!-- Google Search Verification -->
     <meta
       name="google-site-verification"
@@ -33,8 +34,10 @@
     />
     <meta
       property="og:image"
-      content="https://asianbolt-company.web.app/assets/og-image.jpg"
+      content="https://asianbolt-company.web.app/assets/og-preview.png"
     />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
       content="Asian Bolt Company - Hardware and Fasteners in Bengaluru"
@@ -52,7 +55,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://asianbolt-company.web.app/assets/og-image.jpg"
+      content="https://asianbolt-company.web.app/assets/og-preview.png"
     />
 
     <!-- Schema.org JSON-LD Structured Data for Local SEO -->
@@ -68,7 +71,12 @@
         "foundingDate": "1988",
         "priceRange": "₹₹",
         "currenciesAccepted": "INR",
-        "paymentAccepted": "Cash, Credit Card, Debit Card, UPI, NFC",
+        "paymentAccepted": "Cash, Credit Card, Debit Card, UPI",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.2",
+          "reviewCount": "48"
+        },
         "areaServed": "IN",
         "address": {
           "@type": "PostalAddress",
@@ -415,6 +423,36 @@
             availability.
           </p>
         </div>
+
+        <!-- Fastener Photo Identification Banner -->
+        <div class="photo-id-banner reveal" role="region" aria-label="Fastener size identification help">
+          <div class="photo-id-banner__content">
+            <div class="photo-id-banner__icon" aria-hidden="true">
+              <!-- Camera and ruler icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+                <path d="M1 8h4" />
+              </svg>
+            </div>
+            <div class="photo-id-banner__text">
+              <h3>NOT SURE OF THE SIZE? SEND A PHOTO.</h3>
+              <p>Can't identify your fastener? Snap a quick photo next to a coin or ruler and WhatsApp us—we'll match the thread, gauge, and grade for you.</p>
+            </div>
+          </div>
+          <a
+            class="button button--yellow photo-id-banner__cta"
+            href="https://wa.me/919845219458?text=Hi%20Asian%20Bolt%20Company%2C%20I%20need%20help%20identifying%20a%20fastener.%20Sending%20a%20photo%20shortly."
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <!-- WhatsApp icon -->
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+            Send Photo on WhatsApp <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </section>
 
       <section
@@ -451,12 +489,12 @@
             <span>Same-day delivery</span>
           </div>
           <div class="service-item">
-            <!-- UPI / NFC payment icon -->
+            <!-- UPI payment icon -->
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
               <rect x="3" y="5" width="18" height="14" rx="1" />
               <path d="M3 10h18M7 15h4" />
             </svg>
-            <span>UPI / Google Pay &amp; NFC</span>
+            <span>UPI</span>
           </div>
           <div class="service-item">
             <!-- Card payment icon -->
@@ -466,6 +504,94 @@
             </svg>
             <span>Visa / Mastercard / Amex &amp; debit cards</span>
           </div>
+        </div>
+      </section>
+
+      <section
+        class="reviews section section--spaced reveal"
+        id="reviews"
+        aria-labelledby="reviews-title"
+      >
+        <div class="reviews__header">
+          <div>
+            <p class="eyebrow">VERIFIED CUSTOMER TRUST</p>
+            <h2 id="reviews-title">TRUSTED BY BENGALURU BUYERS SINCE 1988</h2>
+          </div>
+          <div class="reviews__badge" aria-label="Rated 4.2 out of 5 stars based on 48 Google reviews">
+            <span class="reviews__badge-score">4.2</span>
+            <div class="reviews__stars" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <span class="reviews__badge-label">4.2 ★ on Google • 48 Reviews</span>
+          </div>
+        </div>
+
+        <div class="reviews__grid">
+          <article class="review-card">
+            <div class="review-card__stars" aria-label="5 out of 5 stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <blockquote class="review-card__quote">
+              <p>"[PASTE REAL 5-STAR REVIEW 1]"</p>
+            </blockquote>
+            <footer class="review-card__author">
+              <span class="review-card__name">[PASTE REVIEWER 1 NAME]</span>
+              <span class="review-card__source">Verified Google Review</span>
+            </footer>
+          </article>
+
+          <article class="review-card">
+            <div class="review-card__stars" aria-label="5 out of 5 stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <blockquote class="review-card__quote">
+              <p>"[PASTE REAL 5-STAR REVIEW 2]"</p>
+            </blockquote>
+            <footer class="review-card__author">
+              <span class="review-card__name">[PASTE REVIEWER 2 NAME]</span>
+              <span class="review-card__source">Verified Google Review</span>
+            </footer>
+          </article>
+
+          <article class="review-card">
+            <div class="review-card__stars" aria-label="5 out of 5 stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <blockquote class="review-card__quote">
+              <p>"[PASTE REAL 5-STAR REVIEW 3]"</p>
+            </blockquote>
+            <footer class="review-card__author">
+              <span class="review-card__name">[PASTE REVIEWER 3 NAME]</span>
+              <span class="review-card__source">Verified Google Review</span>
+            </footer>
+          </article>
+        </div>
+
+        <div class="reviews__actions">
+          <a
+            class="button button--outline-dark"
+            href="https://www.google.com/maps/search/?api=1&amp;query=Asian+Bolt+Company%2C+Jewellers+Street%2C+Shivaji+Nagar%2C+Bengaluru+560001"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Read All Reviews on Google <span aria-hidden="true">↗</span>
+          </a>
         </div>
       </section>
 
@@ -589,6 +715,39 @@
         © <span id="current-year">2026</span> Asian Bolt Company
       </p>
     </footer>
+
+    <!-- Mobile Sticky Quick Actions Bar -->
+    <nav class="mobile-action-bar" aria-label="Quick contact actions">
+      <a class="mobile-action-bar__btn" href="tel:+918041249376">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
+        <span>Call</span>
+      </a>
+      <a
+        class="mobile-action-bar__btn"
+        href="https://www.google.com/maps/search/?api=1&amp;query=Asian+Bolt+Company%2C+Jewellers+Street%2C+Shivaji+Nagar%2C+Bengaluru+560001"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Directions</span>
+      </a>
+      <a
+        class="mobile-action-bar__btn mobile-action-bar__btn--whatsapp"
+        href="https://wa.me/919845219458"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+        <span>WhatsApp</span>
+      </a>
+    </nav>
 
     <div class="quote-backdrop" id="quote-backdrop" aria-hidden="true"></div>
     <aside
