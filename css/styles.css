@@ -1858,23 +1858,33 @@ body.quote-drawer-open {
   font-size: 11px;
 }
 
-/* ─── Verified Google Reviews Strip ──────────────────────────────── */
-.reviews {
-  padding-block: 38px;
-  border-top: 1px solid var(--color-silver);
-  border-bottom: 1px solid var(--color-silver);
+/* ─── Verified Google Reviews Band (Full Width) ─────────────────── */
+.reviews,
+#reviews {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding-block: 3rem;
   background: var(--color-surface);
+  border-top: none;
+  border-bottom: 1px solid var(--color-silver);
 }
 
+.reviews__inner,
 .reviews__strip {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 32px;
+  gap: 28px;
+  width: min(100% - var(--page-gutter) * 2, var(--content-width));
+  margin-inline: auto;
+  background: transparent;
+  border: none;
 }
 
 .reviews__info {
-  max-width: 580px;
+  flex: 1;
+  min-width: 0;
 }
 
 .reviews__info .eyebrow {
@@ -1883,14 +1893,21 @@ body.quote-drawer-open {
 
 .reviews__info h2 {
   margin: 0;
-  font-size: clamp(26px, 3.8vw, 38px);
-  line-height: 1.08;
+  font-size: clamp(24px, 2.5vw, 34px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 1100px) {
+  .reviews__info h2 {
+    white-space: nowrap;
+  }
 }
 
 .reviews__action-group {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   flex-shrink: 0;
   flex-wrap: wrap;
 }
@@ -1938,6 +1955,7 @@ body.quote-drawer-open {
 .reviews__cta {
   min-height: 44px;
   font-size: 11px;
+  white-space: nowrap;
 }
 
 .button--outline-dark {
@@ -1954,21 +1972,27 @@ body.quote-drawer-open {
 }
 
 @media (max-width: 900px) {
-  .reviews {
-    padding-block: 28px;
+  .reviews,
+  #reviews {
+    padding-block: 2.25rem;
   }
 
+  .reviews__inner,
   .reviews__strip {
     flex-direction: column;
     align-items: flex-start;
     gap: 18px;
   }
 
+  .reviews__info h2 {
+    white-space: normal;
+  }
+
   .reviews__action-group {
     width: 100%;
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
+    gap: 10px;
   }
 
   .reviews__badge {
